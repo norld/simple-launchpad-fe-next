@@ -36,7 +36,7 @@ export default function ModalWrapper({ children, open, handleClose, title = "Mod
     >
       <Fade in={open}>
         <Box sx={style}>
-          <Stack direction="row" alignItems={"center"} justifyContent="space-between">
+          <Stack style={{ paddingBottom: "20px" }} direction="row" alignItems={"center"} justifyContent="space-between">
             <p className={classNames("text-white font-bold text-lg", ...additionalTextClasses)}>{title}</p>
             <IconButton onClick={onCloseCallback} className="rounded-full hover:bg-main">
               <Close className="text-white" />

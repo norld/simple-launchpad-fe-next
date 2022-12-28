@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useAccount, useDisconnect, useNetwork, useSwitchNetwork } from "wagmi";
 import { styled } from "@mui/material/styles";
 import { tooltipClasses, Tooltip } from "@mui/material";
-import AccountInfo from "../AccountInfo";
-import { CHAIN_ID, NETWORK_NAME } from "src/constants";
+import AccountInfo from "./info";
+import { CHAIN_ID, NETWORK_NAME } from "@/configs/constants";
 import ModalWrapper from "../common/wrapperModal";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import ZenithButton from "../Button";
+import LPDButton from "@/components/button/primaryButton";
 import { toast } from "react-toastify";
-import ConnectModal from "../ConnectModal";
+import ConnectModal from "../common/connectModal";
 
 const CustomizedToolTip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(({ _ }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
@@ -63,15 +63,13 @@ function Account({ additionalClasses = [], width, renderView = true }) {
 
   return !connected && renderView ? (
     <div style={width === "full" ? { width: "100%" } : { width }}>
-      <button
-        onClick={handleOpen}
-        className={classNames(
-          '"flex w-full justify-center rounded-xl border border-transparent bg-light py-3 px-4 text-sm font-medium text-white shadow-sm hover:bg-dark focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"',
-          ...additionalClasses
-        )}
-      >
-        Connect
-      </button>
+      <LPDButton
+        title={"Connect Wallet"}
+        loading={false}
+        cb={() => {
+          handleOpen();
+        }}
+      />
 
       <ConnectModal handleClose={handleClose} open={open} />
     </div>
@@ -109,7 +107,7 @@ function Account({ additionalClasses = [], width, renderView = true }) {
                 <ul role="list" className="list-disc space-y-1 pl-5">
                   <li>Add {NETWORK_NAME} to your wallets</li>
                   <li>Switch your network to {NETWORK_NAME}</li>
-                  <ZenithButton
+                  <LPDButton
                     title={"Change Network"}
                     loading={isLoading}
                     cb={() => {

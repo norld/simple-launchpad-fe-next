@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
+import Account from "../account";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
@@ -51,22 +52,7 @@ const Header = () => {
             ))}
           </div>
           <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
-            <LPDButton
-              title={"Connect Wallet"}
-              loading={false}
-              cb={() => {
-                // try {
-                //   switchNetwork(CHAIN_ID);
-                // } catch (error) {
-                //   disconnect();
-                //   setOpenNetworkModal(false);
-                //   setOpen(false);
-                //   toast(error.message || "Some Error Occured");
-                // }
-              }}
-              // disabled={!switchNetwork || chain?.id === CHAIN_ID}
-            />
-            <ConnectModal open={openConnectModal} handleClose={() => setOpenConnectModal(false)} />
+            <Account />
           </div>
         </nav>
         <Dialog as="div" open={mobileMenuOpen} onClose={setMobileMenuOpen}>

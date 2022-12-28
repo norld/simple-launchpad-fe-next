@@ -45,8 +45,8 @@ export default function Example() {
         <div className="relative mt-8">
           <div className="relative -mb-6 w-full overflow-x-auto pb-6">
             <ul role="list" className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-x-8 lg:space-x-0">
-              {products.map((product) => (
-                <li key={product.id} className="inline-flex w-64 flex-col text-center lg:w-auto">
+              {products.map((product, i) => (
+                <li key={product.id + i} className="inline-flex w-64 flex-col text-center lg:w-auto">
                   <div className="group relative">
                     <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-50">
                       <img
