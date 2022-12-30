@@ -1,17 +1,7 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
+import { BASE_API_URL } from "@/configs/constants";
+import ProgressBarMenu from "./progressBarMenu";
+import moment from "moment";
+import Link from "next/link";
 const products = [
   {
     id: 1,
@@ -30,12 +20,13 @@ const products = [
   // More products...
 ];
 
-export default function Example() {
+export default function Card({ item }) {
+  console.log("@item", item);
   return (
-    <div className="bg-dark">
+    <div id="product-list" className="dark:bg-dark">
       <div className="py-16 sm:py-24 lg:mx-auto lg:max-w-7xl lg:px-8">
         <div className="flex items-center justify-between px-4 sm:px-6 lg:px-0">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-100">Trending products</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-gray-600 dark:text-gray-100">Listing</h2>
           <a href="#" className="hidden text-sm font-semibold text-orange-600 hover:text-orange-500 sm:block">
             See everything
             <span aria-hidden="true"> &rarr;</span>
@@ -44,44 +35,76 @@ export default function Example() {
 
         <div className="relative mt-8">
           <div className="relative -mb-6 w-full overflow-x-auto pb-6">
-            <ul role="list" className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-x-8 lg:space-x-0">
-              {products.map((product, i) => (
-                <li key={product.id + i} className="inline-flex w-64 flex-col text-center lg:w-auto">
-                  <div className="group relative">
-                    <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-50">
-                      <img
-                        src={product.imageSrc}
-                        alt={product.imageAlt}
-                        className="h-full w-full object-cover object-center group-hover:opacity-75"
-                      />
-                    </div>
-                    <div className="mt-6">
-                      <p className="text-sm text-gray-100">{product.color}</p>
-                      <h3 className="mt-1 font-semibold text-gray-100">
-                        <a href={product.href}>
-                          <span className="absolute inset-0" />
-                          {product.name}
-                        </a>
-                      </h3>
-                      <p className="mt-1 text-gray-200">{product.price}</p>
-                    </div>
-                  </div>
+            <div className="mx-auto mt-12 grid max-w-lg gap-5 lg:max-w-none lg:grid-cols-3">
+              {item.data.map((product, i) => (
+                <>
+                  <Link href={`/detail/${product.id}`} className="flex flex-col rounded-lg border p-4" role="button">
+                    <div className="pe-pointer my-3">
+                      <div className="statuses">
+                        <div className={"d-flex align-items-center"}>
+                          <p className="statusText">Progress</p>
+                        </div>
+                        <div className="status2">
+                          <p className="statusText">Audited</p>
+                        </div>
+                      </div>
+                      <div className="logoAndTitleBox">
+                        <div className="logoBox">
+                          <div style={{ position: "relative" }}>
+                            <img className="w80" src={BASE_API_URL + product.tokenInfo.tokenLogo.formats.thumbnail.url} alt="chain logo" />
+                            <img
+                              src={BASE_API_URL + product.tokenInfo.tokenLogo.formats.thumbnail.url}
+                              alt="chain logo"
+                              style={{
+                                position: "absolute",
+                                bottom: "0",
+                                right: "0",
+                                height: "40px",
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="titleBox">
+                          <p className="titleBox1">{product.tokenInfo.tokenSymbol}</p>
+                          <p className="titleBox2">{product.tokenInfo.tokenName}</p>
+                        </div>
+                        <div className="otherLogoBox">
+                          <a href={product.linkContract}>
+                            <img src={`/icon/bsc.svg`} alt="contract" />
+                          </a>
+                          <a href={product.linkWebsite}>
+                            <img src={`/icon/bsc.svg`} alt="website" />
+                          </a>
+                          <a href={product.linkWhitepaper}>
+                            <img src={`/icon/bsc.svg`} alt="whitepaper" />
+                          </a>
+                        </div>
+                      </div>
+                      <div className="launchpadInfo mt-3">
+                        <div className="boxDetail">
+                          <p className="stackingInfoTitle">Soft-Hard</p>
+                          <span className="h6">
+                            {product.softCap} - {product.hardCap}
+                          </span>
+                        </div>
+                        <div className="boxDetail">
+                          <p className="stackingInfoTitle">Starts</p>
+                          <p>{moment(product.launchDate).format("DD MMMM YYYY")}</p>
+                        </div>
+                        <div className="boxDetail">
+                          <p className="stackingInfoTitle">Price</p>
 
-                  <h4 className="sr-only">Available colors</h4>
-                  <ul role="list" className="mt-auto flex items-center justify-center space-x-3 pt-6">
-                    {product.availableColors.map((color) => (
-                      <li
-                        key={color.name}
-                        className="h-4 w-4 rounded-full border border-white border-opacity-10"
-                        style={{ backgroundColor: color.colorBg }}
-                      >
-                        <span className="sr-only"> {color.name} </span>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
+                          <p className="h6">
+                            1 {product.tokenInfo.tokenSymbol} = {product.priceLaunch} BUSD
+                          </p>
+                        </div>
+                      </div>
+                      <ProgressBarMenu item={product} />
+                    </div>
+                  </Link>
+                </>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
 

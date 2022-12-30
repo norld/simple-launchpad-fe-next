@@ -1,6 +1,34 @@
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getChainData } from "src/redux/actions/chainActions";
+import { getLaunchpadData } from "src/redux/actions/launchpadAction";
+import Loader from "@/components/common/loader";
+import Link from "next/link";
+
 import Faq from "@/components/common/faq";
 import Card from "@/components/common/card";
 export default function Example() {
+  const launchpadData = useSelector((state) => state?.launchpads);
+
+  const dispatch = useDispatch();
+
+  const fetchData = async () => {
+    axios.get("http://localhost:1337/api/chains").then((res) => dispatch(getChainData(res.data)));
+    axios.get("http://localhost:1337/api/launchpads?populate[tokenInfo][populate]=*").then((res) => {
+      console.log(res);
+      dispatch(getLaunchpadData(res.data));
+    });
+    axios.get("http://localhost:1337/api/token-infos").then((res) => dispatch(getChainData(res.data)));
+  };
+
+  useEffect(() => {
+    console.log("@crot", launchpadData);
+  }, [launchpadData]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div className="isolate">
       <main>
@@ -11,26 +39,26 @@ export default function Example() {
                 <div className="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                   <span className="text-gray-600">
                     Announcing our next round of funding.{" "}
-                    <a href="#" className="font-semibold text-indigo-600">
+                    {/* <a href="#" className="font-semibold text-indigo-600">
                       <span className="absolute inset-0" aria-hidden="true" />
                       Read more <span aria-hidden="true">&rarr;</span>
-                    </a>
+                    </a> */}
                   </span>
                 </div>
               </div>
               <div>
                 <h1 className="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">Trusted Platform for Crypto Launchpad</h1>
                 <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
-                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam
-                  occaecat fugiat aliqua.
+                  Launching qualified projects on the crosschain Blockchain. Whitelist your address to get early-access to promising
+                  projects.
                 </p>
                 <div className="mt-8 flex gap-x-4 sm:justify-center">
-                  <a
-                    href="#"
+                  <Link
+                    href="/apply-project"
                     className="inline-block rounded-lg bg-orange-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-orange-600 hover:bg-orange-700 hover:ring-orange-700"
                   >
                     Apply project
-                  </a>
+                  </Link>
                   <a href="#" className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-light-900">
                     Join Community
                   </a>
@@ -109,7 +137,8 @@ export default function Example() {
               </span>
             </div>
           </div>
-          <Card />
+          {launchpadData.loading ? <Loader /> : <Card item={launchpadData.launchpads} />}
+
           <div className="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
             <Faq />
           </div>

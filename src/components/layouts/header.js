@@ -12,10 +12,8 @@ import LPDButton from "@/components/button/primaryButton";
 import ConnectModal from "@/components/common/connectModal";
 
 const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
+  { name: "Listing", href: "#product-list" },
+  { name: "FAQ", href: "#faq" },
 ];
 const Header = () => {
   const { isConnected, address } = useAccount();
@@ -29,10 +27,10 @@ const Header = () => {
       <div>
         <nav className="flex h-9 items-center justify-between" aria-label="Global">
           <div className="flex lg:min-w-0 lg:flex-1" aria-label="Global">
-            <a href="#" className="-m-1.5 p-1.5">
+            <Link href="/" className="-m-1.5 p-1.5">
               <span className="sr-only"> Trusted Platform for Crypto Launchpad</span>
               <img className="h-9" src={linkLogo} alt="" />
-            </a>
+            </Link>
           </div>
           <div className="flex lg:hidden">
             <button
@@ -44,25 +42,25 @@ const Header = () => {
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
-          <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-center lg:gap-x-12">
+          {/* <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-center lg:gap-x-12">
             {navigation.map((item) => (
               <a key={item.name} href={item.href} className="font-semibold text-light-900 hover:text-light-900">
                 {item.name}
               </a>
             ))}
-          </div>
+          </div> */}
           <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
             <Account />
           </div>
         </nav>
         <Dialog as="div" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-          <Dialog.Panel focus="true" className="fixed inset-0 z-10 overflow-y-auto bg-dark px-6 py-6 lg:hidden">
+          <Dialog.Panel focus="true" className="fixed inset-0 z-10 overflow-y-auto dark:bg-dark px-6 py-6 lg:hidden">
             <div className="flex h-9 items-center justify-between">
               <div className="flex">
-                <a href="#" className="-m-1.5 p-1.5">
-                  <span className="sr-only">Your Company</span>
+                <Link href="/" className="-m-1.5 p-1.5">
+                  <span className="sr-only">Launchpad</span>
                   <img className="h-8" src="logo.png" alt="" />
-                </a>
+                </Link>
               </div>
               <div className="flex">
                 <button

@@ -5,6 +5,8 @@ import { bsc, bscTestnet } from "@wagmi/chains";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { CONFIG_CHAIN } from "@/configs/constants";
+import { store } from "../redux/stores/index";
+import { Provider } from "react-redux";
 import Header from "@/components/layouts/header";
 import Footer from "@/components/layouts/footer";
 const { chains, provider, webSocketProvider } = configureChains(
@@ -18,20 +20,23 @@ const { chains, provider, webSocketProvider } = configureChains(
   ]
 );
 
+console.log("@store", store);
+
 const client = createClient({
   autoConnect: true,
   connectors: [new MetaMaskConnector({ chains })],
   provider,
   webSocketProvider,
 });
-console.log("@client", client);
 function MyApp({ Component, pageProps }) {
   return (
-    <WagmiConfig client={client}>
-      <Header />
-      <Component {...pageProps} />
-      <Footer />
-    </WagmiConfig>
+    <Provider store={store}>
+      <WagmiConfig client={client}>
+        <Header />
+        <Component {...pageProps} />
+        <Footer />
+      </WagmiConfig>
+    </Provider>
   );
 }
 

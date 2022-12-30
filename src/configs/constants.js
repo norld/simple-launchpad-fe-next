@@ -1,4 +1,5 @@
 export const BASE_URL = "http://localhost:3000";
+export const BASE_API_URL = "http://localhost:1337";
 // export const IS_DEV = process.env.NODE_ENV !== 'production'
 export const IS_DEV = true;
 export const CHAIN_ID = IS_DEV ? 97 : 56;
