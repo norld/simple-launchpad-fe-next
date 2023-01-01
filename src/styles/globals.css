@@ -51,7 +51,6 @@ a {
   border: 0;
   border-radius: 20px;
   padding: 1.5vh;
-  font-family: "Montserrat";
   font-weight: 600;
   font-size: 0.8em;
   color: white;
@@ -128,14 +127,12 @@ a {
   color: rgba(255, 255, 255, 0.5);
   font-weight: 600;
   font-size: 18px;
-  font-family: "Montserrat";
 }
 
 .titleBox2 {
   margin: 1vh auto;
   font-weight: bold;
   font-size: 20px;
-  font-family: "Montserrat";
 }
 
 .otherLogoBox {
@@ -155,7 +152,6 @@ div.progress {
 }
 
 .progressInfo {
-  font-family: "Montserrat";
   font-size: 0.8rem;
   margin: 0 1em;
   /* border-bottom: 1px solid rgba(255, 255, 255, 0.1); */
@@ -282,4 +278,14 @@ input:checked + .tab-label::after {
 input:checked ~ .tab-content {
   max-height: 100vh;
   padding: 1em;
+}
+
+.boxDetail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  word-spacing: 0.1em;
+  margin: 0 0.5em;
+  color: #fff;
 }

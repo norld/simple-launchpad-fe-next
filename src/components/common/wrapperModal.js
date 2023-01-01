@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import { IconButton, Stack } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import { classNames } from "@/helpers/formatters";
+import { classNames } from "src/helpers/formatters";
 
 const style = {
   position: "absolute",

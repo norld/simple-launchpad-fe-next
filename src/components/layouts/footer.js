@@ -92,7 +92,7 @@ const navigation = {
 
 export default function Example() {
   return (
-    <footer className="bg-gray-800" aria-labelledby="footer-heading">
+    <footer aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>

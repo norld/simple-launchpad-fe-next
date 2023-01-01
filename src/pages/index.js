@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getChainData } from "src/redux/actions/chainActions";
 import { getLaunchpadData } from "src/redux/actions/launchpadAction";
-import Loader from "@/components/common/loader";
+import Loader from "src/components/common/loader";
 import Link from "next/link";
 
-import Faq from "@/components/common/faq";
-import Card from "@/components/common/card";
+import Faq from "src/components/common/faq";
+import Card from "src/components/common/card";
 export default function Example() {
   const launchpadData = useSelector((state) => state?.launchpads);
 
@@ -137,9 +137,9 @@ export default function Example() {
               </span>
             </div>
           </div>
-          {launchpadData.loading ? <Loader /> : <Card item={launchpadData.launchpads} />}
+          {launchpadData.loading ? <Loader /> : <Card key={1} item={launchpadData.launchpads} />}
 
-          <div className="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
+          <div className="mx-auto max-w-3xl">
             <Faq />
           </div>
         </div>

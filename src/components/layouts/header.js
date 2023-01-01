@@ -7,9 +7,9 @@ import Account from "../account";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { BASE_URL } from "@/configs/constants";
-import LPDButton from "@/components/button/primaryButton";
-import ConnectModal from "@/components/common/connectModal";
+import { BASE_URL } from "src/configs/constants";
+import LPDButton from "src/components/button/primaryButton";
+import ConnectModal from "src/components/common/connectModal";
 
 const navigation = [
   { name: "Listing", href: "#product-list" },

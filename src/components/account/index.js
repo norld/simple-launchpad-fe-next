@@ -4,10 +4,10 @@ import { useAccount, useDisconnect, useNetwork, useSwitchNetwork } from "wagmi";
 import { styled } from "@mui/material/styles";
 import { tooltipClasses, Tooltip } from "@mui/material";
 import AccountInfo from "./info";
-import { CHAIN_ID, NETWORK_NAME } from "@/configs/constants";
+import { CHAIN_ID, NETWORK_NAME } from "src/configs/constants";
 import ModalWrapper from "../common/wrapperModal";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import LPDButton from "@/components/button/primaryButton";
+import LPDButton from "src/components/button/primaryButton";
 import { toast } from "react-toastify";
 import ConnectModal from "../common/connectModal";
 

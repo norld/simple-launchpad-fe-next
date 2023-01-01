@@ -15,34 +15,63 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import moment from "moment";
-import { BASE_API_URL } from "@/configs/constants";
-import contractABI from "@/configs/abis/contractABI";
-import erc20ABI from "@/configs/abis/ERC20ABI";
+import { BASE_API_URL } from "src/configs/constants";
+import { contractABI } from "src/configs/abis/contractABI";
+import { erc20ABI } from "src/configs/abis/ERC20ABI";
+import { ProcessNotify } from "src/components/common/notification";
+import { useContractWrite, useAccount, useContractRead } from "wagmi";
+import { toast } from "react-toastify";
+import { ethers } from "ethers";
 
 export default function Example() {
   const router = useRouter();
   const { id } = router.query;
+  const { address, isConnected } = useAccount();
   const launchpadData = useSelector((state) => state?.launchpads);
   const [selectedLaunchpad, setSelectedLaunchpad] = useState();
   const [statusContract, setStatusContract] = useState();
+  const [allowance, setAllowance] = useState(0);
+  const [donateValue, setDonateValue] = useState(0);
+  const infiniteNumber = "93289328938293829839283928392839283928398293829382938293829382983298329";
 
   const approve = useContractWrite({
     mode: "recklesslyUnprepared",
-    address: selectedLaunchpad && selectedLaunchpad.tokenAddress,
-    abi: contractABI,
+    address: selectedLaunchpad && selectedLaunchpad.tokenInfo.tokenAddress,
+    abi: erc20ABI,
     functionName: "approve",
+    onSuccess: (tx) => {
+      setAllowance(infiniteNumber);
+      toast(<ProcessNotify hash={tx.hash} />);
+    },
   });
+
+  const getAllowance = useContractRead({
+    address: selectedLaunchpad && selectedLaunchpad.tokenInfo.tokenAddress,
+    abi: erc20ABI,
+    args: [address, "0xF6dc2941BcB9dda792808Ac0dF2133b98c001c78"],
+    functionName: "allowance",
+    enabled: false,
+  });
+
+  const refetchShit = async () => {
+    await getAllowance.refetch();
+    setAllowance(getAllowance.data.toString());
+  };
 
   const purchase = useContractWrite({
     mode: "recklesslyUnprepared",
-    address: selectedLaunchpad && selectedLaunchpad.tokenAddress,
+    address: selectedLaunchpad && selectedLaunchpad.poolAddress,
     abi: contractABI,
     functionName: "purchase",
+    onSuccess: (tx) => {
+      console.log("@success", tx);
+      toast(<ProcessNotify hash={tx.hash} />);
+    },
   });
 
   const claimRewards = useContractWrite({
     mode: "recklesslyUnprepared",
-    address: selectedLaunchpad && selectedLaunchpad.tokenAddress,
+    address: selectedLaunchpad && selectedLaunchpad.poolAddress,
     abi: contractABI,
     functionName: "claimRewards",
   });
@@ -100,6 +129,7 @@ export default function Example() {
   useEffect(() => {
     console.log("@selectedLaunchpad", selectedLaunchpad);
     if (selectedLaunchpad) {
+      refetchShit();
       const dateNow = Math.floor(new Date().getTime() / 1000);
       const startDate = Math.floor(new Date(selectedLaunchpad.launchDate).getTime() / 1000);
       const endDate = Math.floor(new Date(selectedLaunchpad.endDate).getTime() / 1000);
@@ -339,16 +369,41 @@ export default function Example() {
                   </div>
                   <div className="justify-stretch mt-6 flex flex-col">
                     {statusContract && statusContract === 1 ? (
-                      <button
-                        type="button"
-                        className="inline-flex items-center justify-center rounded-md border border-transparent bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                      >
-                        Donate
-                      </button>
+                      <>
+                        {parseInt(allowance) > 0 && (
+                          <input
+                            type="text"
+                            name="last-name"
+                            id="last-name"
+                            onChange={(e) => {
+                              setDonateValue(e.target.value);
+                            }}
+                            autoComplete="family-name"
+                            className="mb-3 block w-full rounded-md dark:text-dark border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm"
+                          />
+                        )}
+                        <button
+                          type="button"
+                          className="inline-flex items-center justify-center rounded-md border border-transparent bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                          onClick={() => {
+                            const val = ethers.utils.parseUnits(donateValue, selectedLaunchpad.tokenInfo.tokenDecimal);
+                            parseInt(allowance) > 0
+                              ? purchase.write({
+                                  recklesslySetUnpreparedArgs: [val.toString()],
+                                })
+                              : approve.write({
+                                  recklesslySetUnpreparedArgs: [selectedLaunchpad.poolAddress, infiniteNumber],
+                                });
+                          }}
+                        >
+                          {parseInt(allowance) > 0 ? "Donate" : "Unlock"}
+                        </button>
+                      </>
                     ) : statusContract === 2 ? (
                       <button
                         type="button"
                         className="inline-flex items-center justify-center rounded-md border border-transparent bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                        onClick={() => claimRewards.write()}
                       >
                         Claim
                       </button>

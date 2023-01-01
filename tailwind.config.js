@@ -5,7 +5,7 @@ const colors = {
   border: "#1e2632",
   dark: "#000000",
   light: "#FF4F79",
-  bgDark: "#191B1F",
+  bgDark: "#1d2429",
   disabled: "#bba24f42",
   primaryOne: "rgba(230,69,122,1)",
   primaryTwo: "rgba(112,72,154,1)",

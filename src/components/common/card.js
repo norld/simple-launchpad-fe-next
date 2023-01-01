@@ -1,4 +1,4 @@
-import { BASE_API_URL } from "@/configs/constants";
+import { BASE_API_URL } from "src/configs/constants";
 import ProgressBarMenu from "./progressBarMenu";
 import moment from "moment";
 import Link from "next/link";
@@ -38,7 +38,12 @@ export default function Card({ item }) {
             <div className="mx-auto mt-12 grid max-w-lg gap-5 lg:max-w-none lg:grid-cols-3">
               {item.data.map((product, i) => (
                 <>
-                  <Link href={`/detail/${product.id}`} className="flex flex-col rounded-lg border p-4" role="button">
+                  <Link
+                    key={product.id + i}
+                    href={`/detail/${product.id}`}
+                    className="flex flex-col rounded-lg p-4 dark:bg-bgDark"
+                    role="button"
+                  >
                     <div className="pe-pointer my-3">
                       <div className="statuses">
                         <div className={"d-flex align-items-center"}>

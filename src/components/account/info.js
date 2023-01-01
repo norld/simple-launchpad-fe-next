@@ -1,10 +1,10 @@
-import { toFormattedBalance } from "@/helpers/strings";
+import { toFormattedBalance } from "src/helpers/strings";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { Info } from "@mui/icons-material";
 import { Stack } from "@mui/material";
 import { ethers } from "ethers";
 import { useEffect, useReducer, useState } from "react";
-import { EXPLORER_HREF } from "@/configs/constants";
+import { EXPLORER_HREF } from "src/configs/constants";
 import { useAccount, useBalance, useNetwork } from "wagmi";
 
 const Anim = () => (

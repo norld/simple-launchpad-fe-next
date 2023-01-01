@@ -1,5 +1,5 @@
 import React from "react";
-import { classNames } from "@/helpers/formatters";
+import { classNames } from "src/helpers/formatters";
 
 const Anim = () => (
   <div role="status">
