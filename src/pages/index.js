@@ -1,33 +1,16 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getChainData } from "src/redux/actions/chainActions";
-import { getLaunchpadData } from "src/redux/actions/launchpadAction";
 import Loader from "src/components/common/loader";
 import Link from "next/link";
-
 import Faq from "src/components/common/faq";
 import Card from "src/components/common/card";
+import { fetchData } from "src/helpers/api";
 export default function Example() {
+  const dispatch = useDispatch();
   const launchpadData = useSelector((state) => state?.launchpads);
 
-  const dispatch = useDispatch();
-
-  const fetchData = async () => {
-    axios.get("http://localhost:1337/api/chains").then((res) => dispatch(getChainData(res.data)));
-    axios.get("http://localhost:1337/api/launchpads?populate[tokenInfo][populate]=*").then((res) => {
-      console.log(res);
-      dispatch(getLaunchpadData(res.data));
-    });
-    axios.get("http://localhost:1337/api/token-infos").then((res) => dispatch(getChainData(res.data)));
-  };
-
   useEffect(() => {
-    console.log("@crot", launchpadData);
-  }, [launchpadData]);
-
-  useEffect(() => {
-    fetchData();
+    fetchData(dispatch);
   }, []);
   return (
     <div className="isolate">

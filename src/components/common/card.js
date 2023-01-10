@@ -41,7 +41,7 @@ export default function Card({ item }) {
                   <Link
                     key={product.id + i}
                     href={`/detail/${product.id}`}
-                    className="flex flex-col rounded-lg p-4 dark:bg-bgDark"
+                    className="flex flex-col rounded-lg p-4 dark:bg-bgDark border"
                     role="button"
                   >
                     <div className="pe-pointer my-3">

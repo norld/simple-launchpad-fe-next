@@ -22,6 +22,8 @@ import { ProcessNotify } from "src/components/common/notification";
 import { useContractWrite, useAccount, useContractRead } from "wagmi";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
+import LPDButton from "src/components/button/primaryButton";
+import ConnectModal from "src/components//common/connectModal";
 
 export default function Example() {
   const router = useRouter();
@@ -33,6 +35,11 @@ export default function Example() {
   const [allowance, setAllowance] = useState(0);
   const [donateValue, setDonateValue] = useState(0);
   const infiniteNumber = "93289328938293829839283928392839283928398293829382938293829382983298329";
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const approve = useContractWrite({
     mode: "recklesslyUnprepared",
@@ -55,7 +62,7 @@ export default function Example() {
 
   const refetchShit = async () => {
     await getAllowance.refetch();
-    setAllowance(getAllowance.data.toString());
+    getAllowance.data && setAllowance(getAllowance.data.toString());
   };
 
   const purchase = useContractWrite({
@@ -87,7 +94,7 @@ export default function Example() {
       type: selectedLaunchpad && selectedLaunchpad.verifiedAt ? eventTypes.completed : eventTypes.advanced,
       content: "Applied to",
       target: "Developer",
-      date: "Sep 20",
+      date: selectedLaunchpad && moment(selectedLaunchpad.verifiedAt).format("DD MMMM YYYY"),
       datetime: "2020-09-20",
     },
     {
@@ -111,7 +118,7 @@ export default function Example() {
       type: statusContract && statusContract === 2 ? eventTypes.completed : eventTypes.applied,
       content: "Launchpad End",
       target: "",
-      date: "Oct 4",
+      date: selectedLaunchpad && moment(selectedLaunchpad.endDate).format("DD MMMM YYYY"),
       datetime: "2020-10-04",
     },
   ];
@@ -368,7 +375,7 @@ export default function Example() {
                     </ul>
                   </div>
                   <div className="justify-stretch mt-6 flex flex-col">
-                    {statusContract && statusContract === 1 ? (
+                    {statusContract && statusContract === 1 && isConnected ? (
                       <>
                         {parseInt(allowance) > 0 && (
                           <input
@@ -399,7 +406,7 @@ export default function Example() {
                           {parseInt(allowance) > 0 ? "Donate" : "Unlock"}
                         </button>
                       </>
-                    ) : statusContract === 2 ? (
+                    ) : statusContract === 2 && isConnected ? (
                       <button
                         type="button"
                         className="inline-flex items-center justify-center rounded-md border border-transparent bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-100"
@@ -407,7 +414,19 @@ export default function Example() {
                       >
                         Claim
                       </button>
-                    ) : null}
+                    ) : (
+                      <>
+                        <LPDButton
+                          title={"Please Connect your Wallet"}
+                          loading={false}
+                          cb={() => {
+                            handleOpen();
+                          }}
+                        />
+
+                        <ConnectModal handleClose={handleClose} open={open} />
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -419,11 +438,11 @@ export default function Example() {
                   <dl>
                     <div className="py-5 sm:grid sm:grid-cols-2 sm:gap-4">
                       <dt className="text-sm font-medium text-gray-500">Minimum Buy</dt>
-                      <dd className="mt-1 text-right text-sm text-gray-900 sm:col-span-1 sm:mt-0">1</dd>
+                      <dd className="mt-1 text-right text-sm text-gray-900 sm:col-span-1 sm:mt-0">{selectedLaunchpad.minContribution}</dd>
                     </div>
                     <div className="py-5 sm:grid sm:grid-cols-2 sm:gap-4">
                       <dt className="text-sm font-medium text-gray-500">Maximum Buy</dt>
-                      <dd className="mt-1 text-right text-sm text-gray-900 sm:col-span-1 sm:mt-0">2</dd>
+                      <dd className="mt-1 text-right text-sm text-gray-900 sm:col-span-1 sm:mt-0">{selectedLaunchpad.maxContribution}</dd>
                     </div>
                     <div className="py-5 sm:grid sm:grid-cols-2 sm:gap-4">
                       <dt className="text-sm font-medium text-gray-500">My Contribution</dt>
